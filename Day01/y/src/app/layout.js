@@ -29,6 +29,7 @@ export default function RootLayout({ children }) {
             <Link href="/">Home</Link>
             <Link href="/about">About</Link>
             <Link href="/contact">Contact</Link>
+            <Link href="/todo">Todo</Link>
             <Link href="/signup">SignUp</Link>
             <Link href="/signin">SignIn</Link>
           </div>
