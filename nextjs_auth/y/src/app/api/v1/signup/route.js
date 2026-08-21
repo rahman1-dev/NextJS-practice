@@ -1,7 +1,7 @@
-import UserModle from "@/models/usermodel";
+import UserModle from "@/models/userModel";
 import bcrypt from "bcrypt";
 import { NextResponse } from "next/server";
-import connectDb from "../db/dbConfig";
+import connectDb from "@/db/dbConfig";
 
 connectDb();
 
@@ -9,10 +9,10 @@ export async function POST(req) {
   try {
     const body = await req.json();
     const { username, email, password } = body;
-    console.log("user is :", username, email, password);
+    console.log("user is :", username, email);
 
     //first hash the password and save into db using bcrypt
-    const hashedPassword = bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password, 10);
 
     const addedUser = await UserModle.create({
       email,
@@ -20,8 +20,8 @@ export async function POST(req) {
       username,
     });
 
-    NextResponse.json({ msg: "Registaration successful", addedUser });
+    return NextResponse.json({ msg: "Registaration successful", addedUser });
   } catch (error) {
-    NextResponse.json({ msg: "Something went wrong" });
+    return NextResponse.json({ msg: "Something went wrong" });
   }
 }
