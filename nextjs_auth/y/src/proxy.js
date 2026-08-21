@@ -1,5 +1,4 @@
 import jwt from "jsonwebtoken";
-// import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 
 export async function proxy(req) {
@@ -11,15 +10,17 @@ export async function proxy(req) {
   console.log("token recieved ::", token);
 
   const isApiRoute = pathname.startsWith("/api/");
-  const isOProtectedRoute = pathname.startsWith("/profile");
+  const isProtectedRoute = pathname.startsWith("/profile");
 
   //   1. Handling backend routed
   if (isApiRoute) {
+    console.log("middleware ran for API ROUTE:: ")
     const isPublicRoute =
-      pathname.startsWith("api/v1/signup") ||
-      pathname.startsWith("api/v1/signin");
+      pathname.startsWith("/api/v1/signup") ||
+      pathname.startsWith("/api/v1/signin");
 
     if (isPublicRoute) {
+      console.log("Public route detected at middleware ----------------")
       return NextResponse.next();
     }
 
@@ -54,7 +55,7 @@ export async function proxy(req) {
   }
 
   // 2. Handle Frontend Page Protection (Redirects)
-  if (isOProtectedRoute && !token) {
+  if (isProtectedRoute && !token) {
     const signinUrl = new URL("/signin", req.url);
     return NextResponse.redirect(signinUrl);
   }
